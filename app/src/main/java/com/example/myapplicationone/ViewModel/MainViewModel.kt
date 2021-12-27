@@ -33,7 +33,7 @@ class MainViewModel: ViewModel() {
 
         val service: APIService = retrofit.create(APIService::class.java)
 
-        service.getTop("10", searchTxt)
+        service.getTop("25", searchTxt)
             .enqueue(object : Callback<ListBook> {
                 override fun onResponse(call: Call<ListBook>?, response: Response<ListBook>?) {
 

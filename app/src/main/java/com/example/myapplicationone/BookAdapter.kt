@@ -10,9 +10,7 @@ import com.example.myapplicationone.dataClass.Book
 class BookAdapter(
     val oneClickListener: OnItemClickListener,
     val doubleClickListener: OnItemClickListener,
-    val imgClickListener: OnItemClickListener
-) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    val imgClickListener: OnItemClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val bookList: MutableList<Book> = mutableListOf()
 
@@ -41,12 +39,16 @@ class BookAdapter(
                     }
 
                     override fun onDoubleTap(e: MotionEvent?): Boolean {
+
 //                        Toast.makeText(view.context, "onDoubleTap", Toast.LENGTH_SHORT).show()
-                        if (!bookViewHolder.imgLike.isVisible) {
+
+                        bookViewHolder.book!!.isLike = !bookViewHolder.book!!.isLike
+                        if (bookViewHolder.book!!.isLike) {
                             bookViewHolder.imgLike.visibility = ImageView.VISIBLE
                         } else {
                             bookViewHolder.imgLike.visibility = ImageView.GONE
                         }
+                        doubleClickListener.onItemClick(bookViewHolder.book)
                         return super.onDoubleTap(e)
                     }
                 })
@@ -73,6 +75,14 @@ class BookAdapter(
             ?.replace("]", "")
             ?.replace("\"", "")
         holder.showImage(book)
+
+        if (book.isLike) holder.imgLike.visibility = ImageView.VISIBLE
+        else holder.imgLike.visibility = ImageView.GONE
+//        if (!bookDao?.getBuId(book!!.id)!!.isLike) bookDao?.delete(book)
+//        else {
+//            bookDao?.insert(book)
+//        }
+
     }
 
     override fun getItemCount(): Int {

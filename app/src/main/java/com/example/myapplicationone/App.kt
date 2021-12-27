@@ -9,18 +9,16 @@ import androidx.room.Room
 
 
 class App: Application() {
-    private var dataBase : AppDatabase? = null
-
-    override fun onCreate() {
-        super.onCreate()
-        dataBase = Room.databaseBuilder(this,AppDatabase::class.java,"database").build()
-    }
+    private val dataBase : AppDatabase by lazy {Room.databaseBuilder(this,AppDatabase::class.java,"database")
+        .allowMainThreadQueries()
+        .fallbackToDestructiveMigration()
+        .build() }
 
     fun getInstance(): App {
         return this
     }
 
-    fun getDatabase(): AppDatabase? {
+    fun getDatabase(): AppDatabase {
         return dataBase
     }
 }

@@ -1,7 +1,5 @@
 package com.example.myapplicationone.Fragment
 
-import android.app.Application
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -13,23 +11,16 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplicationone.*
-import com.example.myapplicationone.dataClass.Book
-import com.example.myapplicationone.dataClass.ListBook
 import com.example.myapplicationone.ViewModel.MainViewModel
-
-
-import androidx.room.Room
 import com.example.myapplicationone.App
-
-import com.example.myapplicationone.dataClass.AppDatabase
-
-
-
+import com.example.myapplicationone.dataClass.*
 
 
 class MainFragment : Fragment() {
 
     private val model: MainViewModel by viewModels { defaultViewModelProviderFactory }
+    private val db: AppDatabase by lazy { (requireContext().applicationContext as App).getDatabase() }
+
 
     private val adapter = BookAdapter(oneClickListener = object : BookAdapter.OnItemClickListener {
         override fun onItemClick(book: Book?) {
@@ -49,10 +40,19 @@ class MainFragment : Fragment() {
         }
     }, doubleClickListener = object : BookAdapter.OnItemClickListener {
         override fun onItemClick(book: Book?) {
-//            Log.d("TAG","DOUBLE-CLICK-IN-ADAPTER")
+//            requireActivity().supportFragmentManager
+//            val likeFragment = LikeFragment.newInstance(book)
+//            likeFragment.show(requireFragmentManager(), "LIKE_FR")
+
+            val bookDao: BookDao? = db?.bookDao()
+
+            if (bookDao?.getBuId(book!!.id)?.isLike == true) bookDao.delete(book)
+            else {
+                bookDao?.insert(book)
+
+            }
         }
-    }
-    )
+    })
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -90,23 +90,19 @@ class MainFragment : Fragment() {
 
 //        Log.d("TAG", model.toString())
         val data: LiveData<ListBook> = model.data
-        data.observe(viewLifecycleOwner, Observer<ListBook>() {
-            adapter.setItems(it.list)
+        data.observe(viewLifecycleOwner, Observer<ListBook>() { newList ->
+            val likeList = db.bookDao()?.getAll()
+            for (book in newList.list) {
+                if (likeList?.find {it?.id == book.id} != null) {
+                    book.isLike = true
+                }
+            }
+            adapter.setItems(newList.list)
         })
 
         rclView?.layoutManager = LinearLayoutManager(requireContext())
         rclView?.adapter = adapter
     }
-
-    //    var db = Room.databaseBuilder(
-//        ApplicationProvider.getApplicationContext<Context>(),
-//        AppDatabase::class.java, "database"
-//    ).build()
-    var dataBase = Room.databaseBuilder(
-        context!!.applicationContext,
-        AppDatabase::class.java,
-        "database"
-    ).build()
 
 
     override fun onDetach() {
