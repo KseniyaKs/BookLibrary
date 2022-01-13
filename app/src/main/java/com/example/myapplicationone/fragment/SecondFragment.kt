@@ -1,4 +1,4 @@
-package com.example.myapplicationone.Fragment
+package com.example.myapplicationone.fragment
 
 import android.os.Bundle
 import android.util.Log
@@ -11,10 +11,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
-import com.example.myapplicationone.dataClass.Book
-import com.example.myapplicationone.dataClass.BookDetails
+import com.example.myapplicationone.dataclass.Book
+import com.example.myapplicationone.dataclass.BookDetails
 import com.example.myapplicationone.R
+import com.example.myapplicationone.ViewModel.MainViewModel
 import com.example.myapplicationone.ViewModel.SecondViewModel
+import com.example.myapplicationone.ViewModel.ViewModelFactory
+import javax.inject.Inject
 
 
 /**
@@ -24,9 +27,10 @@ import com.example.myapplicationone.ViewModel.SecondViewModel
  */
 class SecondFragment : Fragment() {
 
-    private val model: SecondViewModel by viewModels { defaultViewModelProviderFactory }
-//    val imgView = view?.findViewById<ImageView>(R.id.imgOfBook)
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
 
+    private val model: SecondViewModel by viewModels { viewModelFactory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +49,7 @@ class SecondFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var book: Book = arguments?.get(BOOK_KEY) as Book
+        val book: Book = arguments?.get(BOOK_KEY) as Book
 
         if (savedInstanceState == null) {
             model.loadData(book)
@@ -72,11 +76,11 @@ class SecondFragment : Fragment() {
         Log.d("TAG", "onViewCreatedSecondFr")
 
         val data: LiveData<BookDetails> = model.data
-        data.observe(viewLifecycleOwner,Observer<BookDetails>() {
+        data.observe(viewLifecycleOwner, {
             if (it.volumeInfo.description == null) {
-                detailsTxt.text == null
+                detailsTxt.text = null
             } else
-                detailsTxt.text = it.volumeInfo.description?.replace("\"", "")
+                detailsTxt.text = it.volumeInfo.description.replace("\"", "")
 
             tittleTxt.text = it.volumeInfo.title
             dateTxt.text = it.volumeInfo.date?.replace("\"", "")

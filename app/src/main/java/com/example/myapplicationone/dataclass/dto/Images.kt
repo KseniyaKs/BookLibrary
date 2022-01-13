@@ -1,4 +1,4 @@
-package com.example.myapplicationone.dataClass
+package com.example.myapplicationone.dataclass.dto
 
 import com.squareup.moshi.Json
 import java.io.Serializable

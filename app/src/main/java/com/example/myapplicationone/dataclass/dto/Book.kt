@@ -1,9 +1,10 @@
-package com.example.myapplicationone.dataClass
+package com.example.myapplicationone.dataclass
 
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
+import com.example.myapplicationone.dataclass.dto.Images
 import com.squareup.moshi.Json
 import java.io.Serializable
 import com.google.gson.Gson
@@ -14,10 +15,8 @@ import java.lang.reflect.Type
 
 data class ListBook(@field:Json(name = "items") val list: List<Book>)
 
-@Entity
 data class Book(
-    @Embedded @field:Json(name = "volumeInfo") val volumeInfo: VolumeInfo,
-    @PrimaryKey
+    @field:Json(name = "volumeInfo") val volumeInfo: VolumeInfo,
     @field:Json(name = "id") val id: String,
     @field:Json(name = "isLike") var isLike: Boolean = false) : Serializable
 
@@ -31,7 +30,7 @@ data class BookDetails(
 data class VolumeInfo(
     @field:Json(name = "title") val title: String?,
     @field:Json(name = "authors") val author: List<String>?,
-    @Embedded @field:Json(name = "imageLinks") val imgLinks: Images?,
+    @field:Json(name = "imageLinks") val imgLinks: Images?,
     @field:Json(name = "description") val description: String?,
     @field:Json(name = "publishedDate") val date: String?,
     @field:Json(name = "previewLink") val previewLink: String?

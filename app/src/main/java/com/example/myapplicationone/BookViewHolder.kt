@@ -6,7 +6,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.myapplicationone.dataClass.Book
+import com.example.myapplicationone.dataclass.Book
 
 class BookViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)  {
     var book: Book? = null

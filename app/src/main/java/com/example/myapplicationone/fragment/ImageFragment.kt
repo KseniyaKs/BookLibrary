@@ -1,4 +1,4 @@
-package com.example.myapplicationone.Fragment
+package com.example.myapplicationone.fragment
 
 import android.os.Bundle
 import android.util.Log
@@ -11,8 +11,8 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import com.example.myapplicationone.dataClass.Book
-import com.example.myapplicationone.dataClass.BookDetails
+import com.example.myapplicationone.dataclass.Book
+import com.example.myapplicationone.dataclass.BookDetails
 import com.example.myapplicationone.R
 import com.example.myapplicationone.ViewModel.ImageViewModel
 
@@ -31,7 +31,7 @@ class ImageFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var book: Book = arguments?.get(BOOK_DETAILS_KEY) as Book
+        val book: Book = arguments?.get(BOOK_DETAILS_KEY) as Book
 
         if (savedInstanceState == null) {
             model.loadData(book)
@@ -40,48 +40,18 @@ class ImageFragment : DialogFragment() {
         val amount = view.findViewById<TextView>(R.id.amount)
         val progressBar = view.findViewById<ProgressBar>(R.id.progressBar)
 
-
-//        val retrofit: Retrofit = Retrofit.Builder()
-//            .baseUrl("https://www.googleapis.com/")
-//            .addConverterFactory(MoshiConverterFactory.create())
-//            .build()
-
         progressBar.visibility = ProgressBar.VISIBLE
 
 
         val data: LiveData<BookDetails> = model.data
-        data.observe(viewLifecycleOwner, Observer<BookDetails>() {
+        data.observe(viewLifecycleOwner, {
             if (it.saleInfo.listPrice?.amount.toString() == "null") amount.text =
-                "Have not this price"
-            else amount.text = "Price: " + it.saleInfo.listPrice?.amount.toString() + "RUB"
+                getString(R.string.havent_price)
+            else amount.text = getString(R.string.price) + it.saleInfo.listPrice?.amount.toString() + "RUB"
             progressBar.visibility = ProgressBar.GONE
 
             Log.d("TAG", "onViewCreatedIMAGE")
         })
-
-//        val service: APIService = retrofit.create(APIService::class.java)
-
-//        service.getBook(book.id)
-//            .enqueue(object : Callback<BookDetails>{
-//                override fun onResponse(call: Call<BookDetails>, response: Response<BookDetails>) {
-//                    Log.d("ppp", "pppp")
-//                    response.body()?.let {
-//                        listOf(it.saleInfo)
-//
-//                        if (it.saleInfo.listPrice?.amount.toString() == "null") {
-//                            amount.text = "Have not this price"
-//                        }
-//                        else amount.text = "Price: " + it.saleInfo.listPrice?.amount.toString() + " RUB"
-//
-//                        progressBar.visibility = ProgressBar.GONE
-//
-//                    }
-//                }
-
-//                override fun onFailure(call: Call<BookDetails>, t: Throwable) {
-//                    Log.d("Tag", "image_fragment_onFailure")
-//                }
-//
     }
 
     companion object {

@@ -2,9 +2,8 @@ package com.example.myapplicationone
 
 import android.view.*
 import android.widget.ImageView
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myapplicationone.dataClass.Book
+import com.example.myapplicationone.dataclass.Book
 
 
 class BookAdapter(

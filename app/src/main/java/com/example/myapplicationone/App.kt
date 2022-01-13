@@ -1,45 +1,31 @@
 package com.example.myapplicationone
 
 import android.app.Application
-import com.example.myapplicationone.dataClass.AppDatabase
+import android.content.Context
+import com.example.myapplicationone.dataclass.AppDatabase
 
 import androidx.room.Room
+import com.example.myapplicationone.di.AppComponent
+import com.example.myapplicationone.di.AppModule
+import com.example.myapplicationone.di.DaggerAppComponent
 
 
+class App : Application() {
 
+    lateinit var appComponent: AppComponent
 
-class App: Application() {
-    private val dataBase : AppDatabase by lazy {Room.databaseBuilder(this,AppDatabase::class.java,"database")
-        .allowMainThreadQueries()
-        .fallbackToDestructiveMigration()
-        .build() }
-
-    fun getInstance(): App {
-        return this
-    }
-
-    fun getDatabase(): AppDatabase {
-        return dataBase
+    override fun onCreate() {
+        super.onCreate()
+        appComponent = DaggerAppComponent
+            .builder()
+            .appModule(AppModule(this.applicationContext))
+            .build()
     }
 }
 
+val Context.appComponent: AppComponent
+    get() = when (this) {
+        is App -> appComponent
+        else -> this.applicationContext.appComponent
+    }
 
-
-//class App : Application() {
-//    var database: AppDatabase? = null
-//        private set
-//
-//    override fun onCreate() {
-//        super.onCreate()
-//        App.Companion.instance = this
-//        database = Room.databaseBuilder(this, AppDatabase::class.java, "database")
-//            .build()
-//    }
-//
-//    companion object {
-//        var instance: App? = null
-//        fun getInstance(): App {
-//            return App.Companion.instance
-//        }
-//    }
-//}

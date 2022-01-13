@@ -4,8 +4,8 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myapplicationone.APIService
-import com.example.myapplicationone.dataClass.Book
-import com.example.myapplicationone.dataClass.BookDetails
+import com.example.myapplicationone.dataclass.Book
+import com.example.myapplicationone.dataclass.BookDetails
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -37,7 +37,7 @@ class ImageViewModel: ViewModel() {
             .enqueue(object : Callback<BookDetails> {
                 override fun onResponse(call: Call<BookDetails>?, response: Response<BookDetails>?) {
                     response?.body()?.let {
-                        data?.value = it
+                        data.value = it
 
                         Log.d("TAG", "response.body()")
                         Log.d("TAG","callback in ImageViewModel")

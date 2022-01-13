@@ -3,15 +3,10 @@ package com.example.myapplicationone.ViewModel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.myapplicationone.APIService
-import com.example.myapplicationone.dataClass.ListBook
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import com.example.myapplicationone.dataclass.ListBook
+import com.example.myapplicationone.request.Repository
 
-class MainViewModel: ViewModel() {
+class MainViewModel(val repository: Repository): ViewModel() {
 
     var data: MutableLiveData<ListBook> = MutableLiveData()
 
@@ -22,31 +17,10 @@ class MainViewModel: ViewModel() {
 
     init {
         Log.d("TAG", "create MyViewModel")
-        loadData(searchTxt = "book")
+        loadSearchData(searchTxt = "book")
     }
 
-    fun loadData(searchTxt : String?){
-        val retrofit: Retrofit = Retrofit.Builder()
-            .baseUrl("https://www.googleapis.com/")
-            .addConverterFactory(MoshiConverterFactory.create())
-            .build()
-
-        val service: APIService = retrofit.create(APIService::class.java)
-
-        service.getTop("25", searchTxt)
-            .enqueue(object : Callback<ListBook> {
-                override fun onResponse(call: Call<ListBook>?, response: Response<ListBook>?) {
-
-                    response?.body()?.let {
-                        data?.value = it
-                        Log.d("TAG", "response.body()")
-//                        Log.d("TAG", "тут mainrecreate")
-                    }
-                }
-
-                override fun onFailure(call: Call<ListBook>?, t: Throwable?) {
-                    Log.d("hjk", "hjkl")
-                }
-            })
+    fun loadSearchData(searchTxt : String?){
+        repository.callSearchBookList(data, searchTxt)
     }
 }

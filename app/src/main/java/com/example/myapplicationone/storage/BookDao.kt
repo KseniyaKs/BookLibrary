@@ -1,35 +1,33 @@
-package com.example.myapplicationone.dataClass
+package com.example.myapplicationone.dataclass
 
 import androidx.room.*
 import androidx.room.RoomDatabase
 
 import androidx.room.Database
-
-
-
+import com.example.myapplicationone.dataclass.entity.BookEntity
 
 
 @Dao
 interface BookDao {
-    @Query("SELECT * FROM book")
-    fun getAll() : List<Book?>?
+    @Query("SELECT * FROM bookentity")
+    suspend fun getAll() : List<BookEntity>?
 
-    @Query("SELECT * FROM book WHERE id = :id")
-    fun getBuId(id: String) : Book
+    @Query("SELECT * FROM bookentity WHERE id = :id")
+    fun getBuId(id: String) : BookEntity
 
 
     @Insert
-    fun insert(book: Book?)
+    fun insert(book: BookEntity?)
 
     @Update
-    fun update(book: Book?)
+    fun update(book: BookEntity?)
 
     @Delete
-    fun delete(book: Book?)
+    fun delete(book: BookEntity?)
 
 }
 
-@Database(entities = [Book::class], version = 2)
+@Database(entities = [BookEntity::class], version = 2)
 @TypeConverters(authorsConverter::class, imagesConverter::class)
 //@TypeConverters(imagesConverter::class)
 abstract class AppDatabase : RoomDatabase() {
