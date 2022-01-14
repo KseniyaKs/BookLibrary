@@ -17,6 +17,7 @@ import com.example.myapplicationone.R
 import com.example.myapplicationone.ViewModel.MainViewModel
 import com.example.myapplicationone.ViewModel.SecondViewModel
 import com.example.myapplicationone.ViewModel.ViewModelFactory
+import com.example.myapplicationone.appComponent
 import javax.inject.Inject
 
 
@@ -35,6 +36,7 @@ class SecondFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d("TAG","onCreate_SecondFr")
+        requireContext().appComponent.inject(this)
     }
 
     override fun onCreateView(

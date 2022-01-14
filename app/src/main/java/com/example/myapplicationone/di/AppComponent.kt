@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import com.example.myapplicationone.App
 import com.example.myapplicationone.fragment.LikeFragment
 import com.example.myapplicationone.fragment.MainFragment
+import com.example.myapplicationone.fragment.SecondFragment
 import dagger.Component
 import javax.inject.Singleton
 
@@ -14,6 +15,8 @@ interface AppComponent {
     fun inject(fragment: LikeFragment)
 
     fun inject(fragment: MainFragment)
+
+    fun inject(fragment: SecondFragment)
 
     fun inject(app: App)
 
